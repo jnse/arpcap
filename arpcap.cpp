@@ -56,7 +56,7 @@ struct ethernet_packet_data
     ethernet_packet_data(unsigned char* ptr=0, ssize_t len=0)
         : pointer_to_data(ptr), data_length(len) { };
     /// Holds pointer to raw packet data.
-	unsigned char* pointer_to_data;
+    unsigned char* pointer_to_data;
     /// Size of raw packet data.
     ssize_t data_length;
 };
@@ -160,7 +160,7 @@ ethernet_packet_data* read_ethernet_packet(int fd, int buffer_size=60)
     }
     result->pointer_to_data = buffer;
     result->data_length = rxlen;
-	return result;
+    return result;
 }
 
 
@@ -183,34 +183,34 @@ void parse_arp(ethernet_packet_data* packet_data)
         std::cerr << "Not an ARP packet" << std::endl;
         return;
     }
-	std::string out = "ARP opcode=";
-	uint16_t opcode = ntohs(arp_resp->ar_op);
+    std::string out = "ARP opcode=";
+    uint16_t opcode = ntohs(arp_resp->ar_op);
     switch(opcode)
-	{
+    {
         case ARPOP_REQUEST:
-			out += "REQUEST";
-			break;
-		case ARPOP_REPLY:
-        	out += "REPLY";
-			break;
-		case ARPOP_RREQUEST:
-			out += "RARP REQUEST";
+            out += "REQUEST";
+            break;
+        case ARPOP_REPLY:
+            out += "REPLY";
+            break;
+        case ARPOP_RREQUEST:
+            out += "RARP REQUEST";
             break;
         case ARPOP_RREPLY:
-			out += "RARP REPLY";
-			break;
-		case ARPOP_InREQUEST:
-			out += "InARP REQUEST";
-			break;
-		case ARPOP_InREPLY:
-			out += "InARP REPLY";
-			break;
-		case ARPOP_NAK:
-			out += "(ATM)ARP NAK";
-			break;
-		default:
-			out += "UNKNOWN ("+std::to_string(opcode)+")";
-			break;
+            out += "RARP REPLY";
+            break;
+        case ARPOP_InREQUEST:
+            out += "InARP REQUEST";
+            break;
+        case ARPOP_InREPLY:
+            out += "InARP REPLY";
+            break;
+        case ARPOP_NAK:
+            out += "(ATM)ARP NAK";
+            break;
+        default:
+            out += "UNKNOWN ("+std::to_string(opcode)+")";
+            break;
     }
     out += " size="+std::to_string(packet_data->data_length);
     data += sizeof(ethhdr) + sizeof(arphdr);
@@ -245,7 +245,7 @@ int main(int argc, char* argv[])
             ethernet_packet_data* data = read_ethernet_packet(fd);
             if (data)
             {
-			    parse_arp(data);
+                parse_arp(data);
             }
         }
         close(fd);
@@ -253,8 +253,8 @@ int main(int argc, char* argv[])
     catch(std::system_error e)
     {
         std::cerr << e.what() << std::endl;
-		print_trace();
-		if (fd > 0) close(fd);
+        print_trace();
+        if (fd > 0) close(fd);
         return 1;
     }
     return 0;
