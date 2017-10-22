@@ -22,7 +22,7 @@ typedef unsigned char ip_address_data[4];
 /// Plain old data structure to hold arp address information.
 struct arp_address_data
 {
-    mac_address_data sender_mac;;
+    mac_address_data sender_mac;
     ip_address_data sender_ip;
     mac_address_data target_mac;
     ip_address_data target_ip;
@@ -229,6 +229,7 @@ void parse_arp(ethernet_packet_data* packet_data)
 
 int main(int argc, char* argv[])
 {
+    int return_value=0;
     arp_fd fd = 0;
     if (argc != 2)
     {
@@ -248,14 +249,13 @@ int main(int argc, char* argv[])
                 parse_arp(data);
             }
         }
-        close(fd);
     }
     catch(std::system_error e)
     {
         std::cerr << e.what() << std::endl;
         print_trace();
-        if (fd > 0) close(fd);
-        return 1;
+        return_value = 1;
     }
-    return 0;
+    if (fd > 0) close(fd);
+    return return_value;
 }
