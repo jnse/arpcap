@@ -34,9 +34,9 @@ std::string mac_ntoa(mac_address_data mac)
     std::stringstream s;
     for (int d = 0; d != 6 ; ++d)
     {
-      s << std::setfill('0') << std::setw(sizeof(char)*2);
-      s << std::hex << (int)mac[d];
-      if (d != 5) s << ":";
+        s << std::setfill('0') << std::setw(sizeof(char)*2);
+        s << std::hex << (int)mac[d];
+        if (d != 5) s << ":";
     }
     return s.str();
 }
