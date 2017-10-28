@@ -67,7 +67,7 @@ struct ethernet_packet_data
     ethernet_packet_data(unsigned char* ptr=0, ssize_t len=0)
         : pointer_to_data(ptr), data_length(len) { };
     /// Destructor.
-    ~ethernet_packet_data(){ if (pointer_to_data) free(pointer_to_data); };
+    ~ethernet_packet_data(){ if (pointer_to_data) delete[] pointer_to_data; };
     /// Holds pointer to raw packet data.
     unsigned char* pointer_to_data;
     /// Size of raw packet data.
@@ -163,12 +163,12 @@ arp_fd listen_for_arp(interface_id interface)
 ethernet_packet_data* read_ethernet_packet(int fd, int buffer_size=60)
 {
     ethernet_packet_data* result = new ethernet_packet_data();
-    unsigned char* buffer = static_cast<unsigned char*>(malloc(buffer_size));
+    unsigned char* buffer = new unsigned char[buffer_size];
     ssize_t rxlen = read(fd, buffer, buffer_size);
     if (rxlen == -1)
     {
         delete result;
-        free(buffer);
+        delete[] buffer;
         throw std::system_error(4,std::generic_category(),
             "Could not read from socket.");
     }
